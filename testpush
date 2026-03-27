@@ -1,1 +1,13 @@
 test
+npx react-native init .
+npx @react-native-community/cli init tempFolder - copy to main after
+update git ignore
+
+win r - sysdm.cpl
+update system variables
+PATH - in appdata add platform tools and emulator folders and tools
+add JAVA_HOME and dl jkd 17 lts and put folder in directory
+add ANDROID_HOME and android/sdk directory - %ANDROID_HOME%
+
+npx react-native start
+npx react-native run-android
