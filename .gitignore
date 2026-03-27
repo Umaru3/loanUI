@@ -1,2 +1,41 @@
+# Node.js dependencies
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# React Native bundler
+.expo/
+.expo-shared/
+.expo-env.local
+.expo-env.production
+
+# Metro bundler cache
+.expo-cache/
+.expo-packager-cache/
+.expo-bundler-cache/
+.expo-babel-cache/
+.expo-cli-cache/
+.expo-cli-debug.log
+
+# Android build
+android/app/build/
+android/.gradle/
+android/.idea/
+android/local.properties
+android/.cxx/
+*.apk
+*.ap_
+
+# iOS build
+ios/build/
+ios/Pods/
+ios/DerivedData/
+ios/.idea/
+ios/*.xcworkspace
+ios/*.xcuserstate
+ios/*.xcuserdata
+
+# VS Code
 .vscode/
+
