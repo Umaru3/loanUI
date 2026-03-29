@@ -4,21 +4,24 @@ import Input from '../../components/Inputs';
 import Button from '../../components/Buttons';
 import styles from './styles';
 
-export default function LoginScreen({ navigation }) {
+export default function RegisterScreen({ navigation }) {
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    console.log('Logging in with:', email, password);
+  const handleRegister = () => {
+    console.log('Registering:', username, email, password);
+    navigation.navigate('Login');
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <Text style={styles.title}>Register</Text>
+      <Input placeholder="Username" value={username} onChangeText={setUsername} />
       <Input placeholder="Email" value={email} onChangeText={setEmail} />
       <Input placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry />
-      <Button title="Login" onPress={handleLogin} />
-      <Button title="Go to Register" onPress={() => navigation.navigate('Register')} />
+      <Button title="Register" onPress={handleRegister} />
+      <Button title="Back to Login" onPress={() => navigation.navigate('Login')} />
     </View>
   );
 }
