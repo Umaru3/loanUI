@@ -3,13 +3,15 @@ import { View, Text } from 'react-native';
 import Input from '../../components/Inputs';
 import Button from '../../components/Buttons';
 import styles from './styles';
+import Login from '../../services/api';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     console.log('Logging in with:', email, password);
+    await Login(email, password);
   };
 
   return (
