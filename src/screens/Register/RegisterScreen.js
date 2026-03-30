@@ -3,14 +3,16 @@ import { View, Text } from 'react-native';
 import Input from '../../components/Inputs';
 import Button from '../../components/Buttons';
 import styles from './styles';
+import Register from '../../services/api';
 
 export default function RegisterScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     console.log('Registering:', username, email, password);
+    await Register(username, email, password);
     navigation.navigate('Login');
   };
 
