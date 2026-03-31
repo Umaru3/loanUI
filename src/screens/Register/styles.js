@@ -11,4 +11,14 @@ export default StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
+  validationText: {
+    fontSize: 12,
+    marginBottom: 8,
+  },
+  invalid: {
+    color: 'red',
+  },
+  valid: {
+    color: 'green',
+  },
 });
