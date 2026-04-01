@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ALert, Alert } from 'react-native';
+import { View, Text, Alert } from 'react-native';
 import Input from '../../components/Inputs';
 import Button from '../../components/Buttons';
 import styles from './styles';
@@ -9,14 +9,16 @@ export default function LoginScreen({ navigation }) {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [token, setToken] = useState(null);
-
   const handleLogin = async () => {
     try{
       console.log('Logging in with:', identifier, password);
       const userData = await login(identifier, password);
+
       setToken(userData.token);
       console.log('Login successful:', userData);
       Alert.alert('Login successful!');
+      
+      navigation.navigate('Home');
     } catch (error) {
       console.error('Login error:', error);
       Alert.alert('Login failed', error.message);
