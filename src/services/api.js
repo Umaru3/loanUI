@@ -25,3 +25,16 @@ export async function register(username, email, password) {
   }
   return response.json();
 }
+
+export async function fetchUserLoans(userId) {
+  const response = await fetch(`${API_BASE_URL}/loan/fetch-loans-userId`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch user loans");
+  }
+  return response.json();
+}
