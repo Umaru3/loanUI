@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { View, Text, FlatList } from "react-native";
+import { View, Text, FlatList, TouchableOpacity } from "react-native";
 import styles from "./styles";
 import Button from "../../components/Buttons";
 import { AuthContext } from "../../context/AuthContext";
@@ -35,20 +35,19 @@ export default function HomeScreen({ navigation }) {
           data={authData.loans || []}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
-            <View style={styles.loanCard}>
+            <TouchableOpacity
+              style={styles.loanCard}
+              onPress={() => navigation.navigate("LoanDetails", { loan: item })}
+            >
               <Text style={styles.loanTitle}>Loan #{item._id.slice(-4)}</Text>
               <Text>Principal: ₱{item.principal}</Text>
               <Text>Interest Rate: {(item.interestRate * 100).toFixed(1)}%</Text>
-              <Text>
-                Duration: {new Date(item.startDate).toLocaleDateString()} →{" "}
-                {new Date(item.endDate).toLocaleDateString()}
-              </Text>
               {item.amountRemaining && (
                 <Text style={styles.remaining}>
                   Remaining Balance: ₱{item.amountRemaining}
                 </Text>
               )}
-            </View>
+            </TouchableOpacity>
           )}
           ListEmptyComponent={
             <Text style={styles.emptyText}>No loans available</Text>
