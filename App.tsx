@@ -7,6 +7,7 @@ import RegisterScreen from './src/screens/Register/RegisterScreen';
 import HomeScreen from './src/screens/Home/HomeScreen';
 import LoanDetailsScreen from './src/screens/LoanDetails/LoanDetailsScreen';
 import { AuthProvider } from './src/context/AuthContext';
+import SafeAreaWrapper from './src/components/SafeAreaWrapper';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -19,27 +20,29 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (
-    <AuthProvider>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login">
-          <Stack.Screen 
-            name="Login" 
-            component={LoginScreen}
-            options={{ headerShown: false }} />
-          <Stack.Screen 
-            name="Register" 
-            component={RegisterScreen}
-            options={{ headerShown: false }} />  
-          <Stack.Screen 
-            name="Home" 
-            component={HomeScreen}
-            options={{ headerShown: false }} />  
-          <Stack.Screen 
-            name="LoanDetails" 
-            component={LoanDetailsScreen}
-            options={{ headerShown: false }} />  
-      </Stack.Navigator>
-    </NavigationContainer>
+  <AuthProvider>
+      <SafeAreaWrapper>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Login">
+            <Stack.Screen 
+              name="Login" 
+              component={LoginScreen}
+              options={{ headerShown: false }} />
+            <Stack.Screen 
+              name="Register" 
+              component={RegisterScreen}
+              options={{ headerShown: false }} />  
+            <Stack.Screen 
+              name="Home" 
+              component={HomeScreen}
+              options={{ headerShown: false }} />  
+            <Stack.Screen 
+              name="LoanDetails" 
+              component={LoanDetailsScreen}
+              options={{ headerShown: false }} />  
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaWrapper>
   </AuthProvider>
   );
 }
