@@ -38,3 +38,16 @@ export async function fetchUserLoans(userId) {
   }
   return response.json();
 }
+
+export async function payLoan(loanId, amountPaid) {
+  const response = await fetch(`${API_BASE_URL}/loan/pay`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ loanId, amountPaid }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to pay loan");
+  }
+  return response.json();
+}

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { View, Text, Modal, TextInput } from "react-native";
+import { View, Text, Modal, TextInput, Alert } from "react-native";
 import Button from "../../components/Buttons";
 import styles from "./styles";
+import { payLoan } from "../../services/api";
 
 export default function LoanDetailsScreen({ route, navigation }) {
   const { loan } = route.params;
@@ -13,7 +14,16 @@ export default function LoanDetailsScreen({ route, navigation }) {
   };
 
   const confirmPay = () => {
-    console.log("User entered:", amount);
+    if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
+      Alert.alert("Invalid Amount", "Please enter a valid payment amount.");
+      setAmount("");
+      return;
+    } else {
+      payLoan(loan._id, parseFloat(amount)).catch((error) => {
+        console.error("Error paying loan:", error);
+      });
+      setAmount("");
+    }
     setShowModal(false);
   };
 
