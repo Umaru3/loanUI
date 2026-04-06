@@ -3,9 +3,12 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     backgroundColor: "#f2f2f2",
+    padding: 20,
+  },
+  scrollContent: {
     justifyContent: "flex-start",
+    paddingBottom: 20,
   },
   card: {
     backgroundColor: "#fff",
@@ -13,7 +16,7 @@ export default StyleSheet.create({
     padding: 16,
     marginBottom: 20,
     marginTop: 40,
-    height: "40%",
+    height: "80%",
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 6,

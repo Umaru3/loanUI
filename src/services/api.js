@@ -51,3 +51,29 @@ export async function payLoan(loanId, amountPaid) {
   }
   return response.json();
 }
+
+export async function fetchLoanByUserId(userId) {
+  const response = await fetch(`${API_BASE_URL}/loan/fetch-loans-userId`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch loans by userId");
+  }
+  return response.json();
+}
+
+export async function fetchLoanById(id) {
+  const response = await fetch(`${API_BASE_URL}/loan/fetch-loans-id`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch loans by id");
+  }
+  return response.json();
+}

@@ -1,47 +1,77 @@
 import React, { useState } from "react";
-import { View, Text, Modal, TextInput, Alert } from "react-native";
+import {
+  ScrollView,
+  View,
+  Text,
+  Modal,
+  TextInput,
+  Alert,
+  RefreshControl,
+} from "react-native";
 import Button from "../../components/Buttons";
 import styles from "./styles";
-import { payLoan } from "../../services/api";
+import { payLoan, fetchLoanById } from "../../services/api";
 
 export default function LoanDetailsScreen({ route, navigation }) {
   const { loan } = route.params;
+  const [loanData, setLoanData] = useState(loan);
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
 
-  const handlePay = () => {
-    setShowModal(true);
-  };
+  const handlePay = () => setShowModal(true);
 
-  const confirmPay = () => {
+  const confirmPay = async () => {
     if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
       Alert.alert("Invalid Amount", "Please enter a valid payment amount.");
       setAmount("");
       return;
-    } else {
-      payLoan(loan._id, parseFloat(amount)).catch((error) => {
-        console.error("Error paying loan:", error);
-      });
-      setAmount("");
     }
-    setShowModal(false);
+    try {
+      await payLoan(loanData._id, parseFloat(amount));
+      const updatedLoan = await fetchLoanById(loanData._id);
+      setLoanData(updatedLoan);
+    } catch (error) {
+      console.error("Error paying loan:", error);
+    } finally {
+      setAmount("");
+      setShowModal(false);
+    }
+  };
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    try {
+      const updatedLoan = await fetchLoanById(loanData._id);
+      setLoanData(updatedLoan);
+    } catch (error) {
+      console.error("Error refreshing loan:", error);
+    } finally {
+      setRefreshing(false);
+    }
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.scrollContent}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+      }
+    >
       <View style={styles.card}>
         <Text style={styles.title}>Loan Details</Text>
-        <Text style={styles.item}>Principal: ₱{loan.principal}</Text>
+        <Text style={styles.item}>Principal: ₱{loanData.principal}</Text>
         <Text style={styles.item}>
-          Interest Rate: {(loan.interestRate * 100).toFixed(1)}%
+          Interest Rate: {(loanData.interestRate * 100).toFixed(1)}%
         </Text>
         <Text style={styles.item}>
-          Duration: {new Date(loan.startDate).toLocaleDateString()} →{" "}
-          {new Date(loan.endDate).toLocaleDateString()}
+          Duration: {new Date(loanData.startDate).toLocaleDateString()} →{" "}
+          {new Date(loanData.endDate).toLocaleDateString()}
         </Text>
-        {loan.amountRemaining && (
+        {loanData.amountRemaining && (
           <Text style={styles.remaining}>
-            Remaining Balance: ₱{loan.amountRemaining}
+            Remaining Balance: ₱{loanData.amountRemaining}
           </Text>
         )}
       </View>
@@ -70,6 +100,6 @@ export default function LoanDetailsScreen({ route, navigation }) {
           </View>
         </View>
       </Modal>
-    </View>
+    </ScrollView>
   );
 }
