@@ -1,25 +1,32 @@
-import React, { useContext, useEffect } from "react";
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { View, Text, FlatList, TouchableOpacity, RefreshControl } from "react-native";
 import styles from "./styles";
 import Button from "../../components/Buttons";
 import { AuthContext } from "../../context/AuthContext";
-import { fetchUserLoans } from "../../services/api";
+import { fetchLoanByUserId } from "../../services/api";
 
 export default function HomeScreen({ navigation }) {
   const { authData, setAuthData } = useContext(AuthContext);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const loadLoans = async () => {
+    try {
+      const loans = await fetchLoanByUserId(authData.userId);
+      setAuthData({ ...authData, loans });
+    } catch (err) {
+      console.error("Error fetching loans:", err);
+    }
+  };
 
   useEffect(() => {
-    const loadLoans = async () => {
-      try {
-        const loans = await fetchUserLoans(authData.userId);
-        setAuthData({ ...authData, loans });
-      } catch (err) {
-        console.error("Error fetching loans:", err);
-      }
-    };
     if (authData.userId) loadLoans();
   }, [authData.userId]);
 
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await loadLoans();
+    setRefreshing(false);
+  };
   const handleLogout = () => {
     setAuthData({ token: null, username: null, userId: null, loans: [] });
     navigation.navigate("Login");
@@ -51,6 +58,9 @@ export default function HomeScreen({ navigation }) {
           )}
           ListEmptyComponent={
             <Text style={styles.emptyText}>No loans available</Text>
+          }
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
           }
         />
       </View>
