@@ -35,6 +35,10 @@ const styles = StyleSheet.create({
     paddingVertical: 10, 
     paddingHorizontal: 16 
   },
+  large: { 
+    paddingVertical: 16, 
+    paddingHorizontal: 36 
+  },
   logout: { 
     paddingVertical: 6, 
     paddingHorizontal: 12,

@@ -6,6 +6,7 @@ import LoginScreen from './src/screens/Login/LoginScreen';
 import RegisterScreen from './src/screens/Register/RegisterScreen';
 import HomeScreen from './src/screens/Home/HomeScreen';
 import LoanDetailsScreen from './src/screens/LoanDetails/LoanDetailsScreen';
+import PaymentHistoryScreen from './src/screens/PaymentHistory/PaymentHistoryScreen';
 import { AuthProvider } from './src/context/AuthContext';
 import SafeAreaWrapper from './src/components/SafeAreaWrapper';
 
@@ -14,6 +15,7 @@ export type RootStackParamList = {
   Register: undefined;
   Home: undefined;
   LoanDetails: { loanId: string };
+  PaymentHistory: { loanId: string };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -39,6 +41,10 @@ export default function App() {
             <Stack.Screen 
               name="LoanDetails" 
               component={LoanDetailsScreen}
+              options={{ headerShown: false }} />
+            <Stack.Screen 
+              name="PaymentHistory" 
+              component={PaymentHistoryScreen}
               options={{ headerShown: false }} />  
         </Stack.Navigator>
       </NavigationContainer>

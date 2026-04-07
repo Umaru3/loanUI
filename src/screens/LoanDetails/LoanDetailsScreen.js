@@ -40,6 +40,7 @@ export default function LoanDetailsScreen({ route, navigation }) {
   };
 
   const handleRefresh = async () => {
+    console.log("loans: ", loan)
     setRefreshing(true);
     try {
       const updatedLoan = await fetchLoanById(loanData._id);
@@ -79,6 +80,14 @@ export default function LoanDetailsScreen({ route, navigation }) {
       <View style={styles.buttonRow}>
         <Button title="Pay" onPress={handlePay} />
         <Button title="Go Back" onPress={() => navigation.goBack()} />
+      </View>
+
+       <View style={styles.buttonRow}>
+        <Button 
+          size="large" 
+          title="Payment History" 
+          onPress={() => navigation.navigate("PaymentHistory", { loanId: loan._id })} 
+        />
       </View>
 
       {/* Payment Modal */}
