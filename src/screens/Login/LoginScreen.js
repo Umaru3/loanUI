@@ -13,7 +13,6 @@ export default function LoginScreen({ navigation }) {
   const { setAuthData } = useContext(AuthContext);
   const handleLogin = async () => {
     try{
-      console.log('Logging in with:', identifier, password);
       const userData = await login(identifier, password);
 
       setToken(userData.token);
@@ -22,7 +21,6 @@ export default function LoginScreen({ navigation }) {
         username: userData.username,
         userId: userData.id
       });
-      console.log('Login successful:', userData);
       Alert.alert('Login successful!');
       
       navigation.navigate('Home');

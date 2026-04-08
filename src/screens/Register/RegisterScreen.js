@@ -12,7 +12,6 @@ export default function RegisterScreen({ navigation }) {
 
   const handleRegister = async () => {
     try{
-      console.log('Registering:', username, email, password);
       await register(username, email, password);
       Alert.alert('Registration successful! Please log in.');
       navigation.navigate('Login');
