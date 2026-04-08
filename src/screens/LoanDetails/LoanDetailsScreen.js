@@ -40,7 +40,6 @@ export default function LoanDetailsScreen({ route, navigation }) {
   };
 
   const handleRefresh = async () => {
-    console.log("loans: ", loan)
     setRefreshing(true);
     try {
       const updatedLoan = await fetchLoanById(loanData._id);
