@@ -5,29 +5,68 @@ import Button from '../../components/Buttons';
 import styles from './styles';
 import { login } from '../../services/api';
 import { AuthContext } from '../../context/AuthContext';
+import * as Keychain from 'react-native-keychain';
 
 export default function LoginScreen({ navigation }) {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
-  const [token, setToken] = useState(null);
   const { setAuthData } = useContext(AuthContext);
+
   const handleLogin = async () => {
-    try{
+    try {
       const userData = await login(identifier, password);
 
-      setToken(userData.token);
+      await Keychain.setGenericPassword(
+        JSON.stringify({
+          username: userData.username,
+          userId: userData.id,
+        }),
+        userData.token,
+        {
+          accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY,
+        }
+      );
+
       setAuthData({
         token: userData.token,
         username: userData.username,
-        userId: userData.id
+        userId: userData.id,
       });
+
       Alert.alert('Login successful!');
-      
       navigation.navigate('Home');
     } catch (error) {
       console.error('Login error:', error);
       Alert.alert('Login failed', error.message);
-      return;
+    }
+  };
+
+  const tryBiometricLogin = async () => {
+    try {
+      const credentials = await Keychain.getGenericPassword({
+        authenticationPrompt: {
+          title: 'Login with Face ID / Fingerprint',
+        },
+      });
+
+      if (credentials) {
+        const storedUser = JSON.parse(credentials.username);
+        const token = credentials.password;
+
+        setAuthData({
+          token,
+          username: storedUser.username,
+          userId: storedUser.userId,
+        });
+
+        Alert.alert('Biometric login successful!');
+        navigation.navigate('Home');
+      } else {
+        Alert.alert('No biometric credentials stored yet');
+      }
+    } catch (err) {
+      console.error('Biometric login failed:', err);
+      Alert.alert('Biometric login failed');
     }
   };
 
@@ -36,10 +75,26 @@ export default function LoginScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
-      <Input placeholder="Email or Username" value={identifier} onChangeText={setIdentifier} />
-      <Input placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry />
+      <Input
+        placeholder="Email or Username"
+        value={identifier}
+        onChangeText={setIdentifier}
+      />
+      <Input
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
       <Button title="Login" onPress={handleLogin} disabled={isDisabled} />
-      <Button title="Go to Register" onPress={() => navigation.navigate('Register')} />
+      <Button
+        title="Go to Register"
+        onPress={() => navigation.navigate('Register')}
+      />
+      <Button
+        title="Login with Face ID / Fingerprint"
+        onPress={tryBiometricLogin}
+      />
     </View>
   );
 }
