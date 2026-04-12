@@ -6,6 +6,7 @@ import styles from './styles';
 import { login } from '../../services/api';
 import { AuthContext } from '../../context/AuthContext';
 import * as Keychain from 'react-native-keychain';
+import { jwtDecode } from 'jwt-decode';
 
 export default function LoginScreen({ navigation }) {
   const [identifier, setIdentifier] = useState('');
@@ -53,6 +54,12 @@ export default function LoginScreen({ navigation }) {
         const storedUser = JSON.parse(credentials.username);
         const token = credentials.password;
 
+      if (!isTokenValid(token)) {
+        Alert.alert("Session expired, please log in again");
+        await Keychain.resetGenericPassword();
+        return;
+      }
+
         setAuthData({
           token,
           username: storedUser.username,
@@ -69,6 +76,17 @@ export default function LoginScreen({ navigation }) {
       Alert.alert('Biometric login failed');
     }
   };
+
+  const isTokenValid = (token) => {
+    try {
+      const decoded = jwtDecode(token);
+      if (!decoded.exp) return false;
+      const now = Date.now/1000;
+      return decoded.exp > now;
+    } catch (e) {
+      return false;
+    }
+  } 
 
   const isDisabled = !identifier || !password;
 
