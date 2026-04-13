@@ -7,6 +7,7 @@ import { login } from '../../services/api';
 import { AuthContext } from '../../context/AuthContext';
 import * as Keychain from 'react-native-keychain';
 import { jwtDecode } from 'jwt-decode';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default function LoginScreen({ navigation }) {
   const [identifier, setIdentifier] = useState('');
@@ -110,8 +111,9 @@ export default function LoginScreen({ navigation }) {
         onPress={() => navigation.navigate('Register')}
       />
       <Button
-        title="Login with Face ID / Fingerprint"
+        title="Login with Biometrics"
         onPress={tryBiometricLogin}
+        icon={<Icon name="fingerprint" size={20} color="#fff" />}
       />
     </View>
   );
